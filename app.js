@@ -1,24 +1,42 @@
-// Get new joke
-document.querySelector('input').addEventListener('click', function(){
-    const xhr = new XMLHttpRequest();
+class Jokes {
+    // Constructor init
+    constructor(button, xhr, textarea) {
+        this.button = button;
+        this.xhr = xhr;
+        this.textarea = textarea;
+    };
 
-    // Location of the jokes and methods how to get them
-    xhr.open('GET', 'http://api.icndb.com/jokes/random', true);
+    getJokes() {
+        this.button.addEventListener('click', () => {
 
-    // What to do if xhr loaded
-    xhr.addEventListener('load', function() {
+            // Location of the jokes and methods how to get them
+            this.xhr.open('GET', 'http://api.icndb.com/jokes/random', true);
 
-        // Status check
-        if (this.status == 200) {
-            const response = JSON.parse(this.responseText);
-            // Display the joke
-            document.querySelector('p').innerHTML = response.value.joke;
-        } else {
-            // Display the error
-            document.querySelector('p').innerHTML = 'Somthing went wrong';
-        };
-    });
+            // Saving the scope
+            const self = this;
+            // What to do if xhr loaded
+            this.xhr.addEventListener('load', function() {
 
-    // Requset sending
-    xhr.send();
-});
+                // Check status
+                if(this.status == 200) {
+                    const response = JSON.parse(this.responseText);
+                    // Display the joke
+                    self.textarea.innerHTML = response.value.joke;
+                } else {
+                    // Display the error
+                    self.textarea.innerHTML = 'Something went wrong';
+                };
+            });
+
+            // Request sending
+            this.xhr.send();
+        });
+    };
+};
+
+const button = document.querySelector('input'),
+      xhr = new XMLHttpRequest,
+      textarea = document.querySelector('p');
+
+const joke = new Jokes(button, xhr, textarea);
+joke.getJokes();
