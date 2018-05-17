@@ -1,8 +1,8 @@
 class Jokes {
     // Constructor init
-    constructor(button, xhr, textarea) {
+    constructor(button, textarea) {
         this.button = button;
-        this.xhr = xhr;
+        this.xhr = new XMLHttpRequest();
         this.textarea = textarea;
     };
 
@@ -11,6 +11,9 @@ class Jokes {
 
             // Location of the jokes and methods how to get them
             this.xhr.open('GET', 'http://api.icndb.com/jokes/random', true);
+
+            // Request sending
+            this.xhr.send();
 
             // Saving the scope
             const self = this;
@@ -27,16 +30,12 @@ class Jokes {
                     self.textarea.innerHTML = 'Something went wrong';
                 };
             });
-
-            // Request sending
-            this.xhr.send();
         });
     };
 };
 
 const button = document.querySelector('input'),
-      xhr = new XMLHttpRequest,
       textarea = document.querySelector('p');
 
-const joke = new Jokes(button, xhr, textarea);
+const joke = new Jokes(button, textarea);
 joke.getJokes();
